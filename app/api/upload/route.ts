@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
-import { writeFile } from 'fs/promises'
-import { join } from 'path'
+import { put } from '@vercel/blob'
 
 export async function POST(request: Request) {
   try {
@@ -28,20 +27,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'File too large. Maximum size is 5MB.' }, { status: 400 })
     }
 
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-
     // Generate unique filename
     const timestamp = Date.now()
     const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
     const filename = `${timestamp}-${originalName}`
-    const filepath = join(process.cwd(), 'public', 'uploads', filename)
 
-    await writeFile(filepath, buffer)
+    // Upload to Vercel Blob
+    const blob = await put(filename, file, {
+      access: 'public',
+      addRandomSuffix: false,
+    })
 
     // Return the public URL
-    const imageUrl = `/uploads/${filename}`
-    return NextResponse.json({ imageUrl })
+    return NextResponse.json({ imageUrl: blob.url })
   } catch (error) {
     console.error('Upload error:', error)
     return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 })

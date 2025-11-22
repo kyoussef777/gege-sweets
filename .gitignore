@@ -47,3 +47,6 @@ next-env.d.ts
 
 # uploaded images
 /public/uploads
+
+# deployment credentials (contains sensitive tokens)
+VERCEL_ENV_SETUP.md

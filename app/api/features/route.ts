@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/auth'
 
@@ -37,6 +38,8 @@ export async function POST(request: Request) {
       },
     })
 
+    revalidatePath('/')
+
     return NextResponse.json(feature)
   } catch (error) {
     console.error('Create feature error:', error)
@@ -68,6 +71,8 @@ export async function PUT(request: Request) {
       },
     })
 
+    revalidatePath('/')
+
     return NextResponse.json(updated)
   } catch (error) {
     console.error('Update feature error:', error)
@@ -92,6 +97,8 @@ export async function DELETE(request: Request) {
     await prisma.homeFeature.delete({
       where: { id },
     })
+
+    revalidatePath('/')
 
     return NextResponse.json({ success: true })
   } catch (error) {

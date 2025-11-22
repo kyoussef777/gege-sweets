@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/auth'
 
@@ -43,6 +44,10 @@ export async function PUT(request: Request) {
         facebook,
       },
     })
+
+    // Revalidate the home page to show updated contact info
+    revalidatePath('/')
+    revalidatePath('/menu')
 
     return NextResponse.json(updated)
   } catch (error) {

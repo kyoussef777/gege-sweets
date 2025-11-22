@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   },
 }
 
+// Revalidate every 60 seconds
+export const revalidate = 60
+
 async function getData() {
   const [settings, features] = await Promise.all([
     prisma.siteSettings.findUnique({

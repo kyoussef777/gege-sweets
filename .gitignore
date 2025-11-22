@@ -50,3 +50,5 @@ next-env.d.ts
 
 # deployment credentials (contains sensitive tokens)
 VERCEL_ENV_SETUP.md
+VERCEL_ENV_VARIABLES.txt
+ADD_THESE_TO_VERCEL.txt
